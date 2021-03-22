@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+    id 'java'
 }
 
 group 'org.example'
@@ -11,8 +12,13 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
 }
 
+test {
+    useTestNG()
+    useJUnitPlatform()
+}
 
