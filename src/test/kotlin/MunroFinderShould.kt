@@ -8,7 +8,7 @@ internal class MunroFinderShould {
 
     @Test
     fun `give us a list of all munros converted from a list of string lines`() {
-        val collection = MunroFinder().parse(PARSED_TEST_DATA)
+        val collection = MunroFinder.parse(PARSED_TEST_DATA)
         val first = collection.munros.first()
         val last = collection.munros.last()
         that(collection.munros.size, Is(602))

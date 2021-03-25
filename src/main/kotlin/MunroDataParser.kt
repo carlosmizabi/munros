@@ -56,7 +56,7 @@ private val Munro?.isValid: Boolean
 
 private val List<String>.munro: Munro.Type
     get() {
-        val value = elementAtOrNull(26) ?: ""
+        val value = elementAtOrNull(27) ?: ""
         return when {
             value.equals("mun", ignoreCase = true) -> Munro.Type.MUNRO
             value.equals("top", ignoreCase = true) -> Munro.Type.TOP

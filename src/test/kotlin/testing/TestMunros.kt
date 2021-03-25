@@ -5,6 +5,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.`is` as Is
 
 object TestMunros {
+    val PARSED_TEST_DATA by lazy {  TestDataLoader.readFullDateFile() }
+
     fun assertMatch(result: Munro, expected: Munro) {
         result.apply {
             assertThat("runningNo", runningNo, Is(expected.runningNo))
