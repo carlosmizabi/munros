@@ -62,6 +62,58 @@ internal class MunroCollectionShould {
         that(total, Is(TOTAL_MUNROS_FROM_DATA))
     }
 
+    @Test
+    fun `sort munros by name ascending`() {
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
+        val sorted = collection.filter(sorting = Sorting.NameAscending)
+        val assertFirstIsSmaller = { first: Munro, second: Munro ->
+            val info = "${first.name} < ${second.name}"
+            that(info, first.name <= second.name, Is(true))
+        }
+        for (i in sorted.indices) {
+            if ( i + 1 < sorted.size) assertFirstIsSmaller(sorted[i], sorted[i + 1])
+        }
+    }
+
+    @Test
+    fun `sort munros by name descending`() {
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
+        val sorted = collection.filter(sorting = Sorting.NameDescending)
+        val assertFirstIsLarger = { first: Munro, second: Munro ->
+            val info = "${first.name} > ${second.name}"
+            that(info, first.name >= second.name, Is(true))
+        }
+        for (i in sorted.indices) {
+            if ( i + 1 < sorted.size) assertFirstIsLarger(sorted[i], sorted[i + 1])
+        }
+    }
+
+    @Test
+    fun `sort munros by height descending`() {
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
+        val sorted = collection.filter(sorting = Sorting.HeightMetersDescending)
+        val assertFirstIsLarger = { first: Munro, second: Munro ->
+            val info = "${first.heightInMeters} > ${second.heightInMeters}"
+            that(info, first.safeHeight >= second.safeHeight, Is(true))
+        }
+        for (i in sorted.indices) {
+            if ( i + 1 < sorted.size) assertFirstIsLarger(sorted[i], sorted[i + 1])
+        }
+    }
+
+    @Test
+    fun `sort munros by height ascending`() {
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
+        val sorted = collection.filter(sorting = Sorting.HeightMetersAscending)
+        val assertFirstIsLarger = { first: Munro, second: Munro ->
+            val info = "${first.heightInMeters} > ${second.heightInMeters}"
+            that(info, first.safeHeight <= second.safeHeight, Is(true))
+        }
+        for (i in sorted.indices) {
+            if ( i + 1 < sorted.size) assertFirstIsLarger(sorted[i], sorted[i + 1])
+        }
+    }
+
     private fun makeForEachType(munros: Int = 0, tops: Int = 0, unknown: Int = 0)
             = makeMunros(Munro.Type.MUNRO, munros) +
             makeMunros(Munro.Type.TOP, tops) +
@@ -74,5 +126,7 @@ internal class MunroCollectionShould {
             )
         }
     }
+
+    val Munro.safeHeight get() = heightInMeters ?: -1.0
 
 }
