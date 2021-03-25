@@ -52,8 +52,7 @@ internal fun String.intoEntries(): List<String> {
 }
 
 private val Munro?.isValid: Boolean
-    get() = this?.name?.isNotEmpty() == true &&
-            (this.heightInMeters != null || this.heightInFeet != null)
+    get() = this?.name?.isNotEmpty() == true && this.xCoordinate != null && this.yCoordinate != null
 
 private val List<String>.munro: Munro.Type
     get() {

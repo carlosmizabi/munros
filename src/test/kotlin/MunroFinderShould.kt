@@ -11,7 +11,7 @@ internal class MunroFinderShould {
         val collection = MunroFinder().parse(PARSED_TEST_DATA)
         val first = collection.munros.first()
         val last = collection.munros.last()
-        that(collection.munros.size, Is(601))
+        that(collection.munros.size, Is(602))
         assertMatch(first, FIRST_MUNRO)
         assertMatch(last, LAST_MUNRO)
     }
