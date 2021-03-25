@@ -1,4 +1,3 @@
-import java.net.URL
 
 data class Munro(
     val runningNo: Int? = null,
@@ -20,6 +19,13 @@ data class Munro(
     val yCoordinate: Int? = null,
     val type: Type = Type.UNKNOWN
 ) {
+
+    fun isTypeMatch(type: Type? = null): Boolean
+        = (if (type != null) this.type == type else this.type != Type.UNKNOWN)
+
+    fun isInRange(heightRange: Range? = null): Boolean
+        = heightRange?.contains(heightInMeters ?: 0.0) ?: true
+
     enum class Type {
         MUNRO,
         TOP,

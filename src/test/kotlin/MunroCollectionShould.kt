@@ -53,11 +53,16 @@ internal class MunroCollectionShould {
     fun `give us Munros within the required range` () {
         val range = 900.00.rangeTo(950.00)
         val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
-        val munros = collection.filter(Munro.Type.MUNRO, heightRange = range)
+        val query = Query(heightRange = range)
+        val munros = collection.filter(Munro.Type.MUNRO, query)
+
         that(munros.size, Is(68))
         that(munros.all { range.contains(it.heightInMeters ?: 0.0)}, Is(true))
-        val underRange = collection.filter(Munro.Type.MUNRO, 0.0.rangeTo(899.99))
-        val overRange = collection.filter(Munro.Type.MUNRO, 950.01.rangeTo(5000.00))
+
+        val underQuery = Query(heightRange =0.0.rangeTo(899.99))
+        val overQuery = Query(heightRange = 950.01.rangeTo(5000.00))
+        val underRange = collection.filter(Munro.Type.MUNRO, underQuery)
+        val overRange = collection.filter(Munro.Type.MUNRO, overQuery)
         val total = munros.size + underRange.size + overRange.size
         that(total, Is(TOTAL_MUNROS_FROM_DATA))
     }
@@ -65,7 +70,8 @@ internal class MunroCollectionShould {
     @Test
     fun `sort munros by name ascending`() {
         val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
-        val sorted = collection.filter(sorting = Sorting.NameAscending)
+        val query = Query(sorts = listOf(Sort.NameAscending))
+        val sorted = collection.filter(query = query)
         val assertFirstIsSmaller = { first: Munro, second: Munro ->
             val info = "${first.name} < ${second.name}"
             that(info, first.name <= second.name, Is(true))
@@ -78,7 +84,8 @@ internal class MunroCollectionShould {
     @Test
     fun `sort munros by name descending`() {
         val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
-        val sorted = collection.filter(sorting = Sorting.NameDescending)
+        val query =  Query(sorts = listOf(Sort.NameDescending))
+        val sorted = collection.filter(query = query)
         val assertFirstIsLarger = { first: Munro, second: Munro ->
             val info = "${first.name} > ${second.name}"
             that(info, first.name >= second.name, Is(true))
@@ -91,7 +98,8 @@ internal class MunroCollectionShould {
     @Test
     fun `sort munros by height descending`() {
         val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
-        val sorted = collection.filter(sorting = Sorting.HeightMetersDescending)
+        val query = Query(sorts = listOf(Sort.HeightMetersDescending))
+        val sorted = collection.filter(query = query)
         val assertFirstIsLarger = { first: Munro, second: Munro ->
             val info = "${first.heightInMeters} > ${second.heightInMeters}"
             that(info, first.safeHeight >= second.safeHeight, Is(true))
@@ -104,7 +112,8 @@ internal class MunroCollectionShould {
     @Test
     fun `sort munros by height ascending`() {
         val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
-        val sorted = collection.filter(sorting = Sorting.HeightMetersAscending)
+        val query = Query(sorts = listOf(Sort.HeightMetersAscending))
+        val sorted = collection.filter(query = query)
         val assertFirstIsLarger = { first: Munro, second: Munro ->
             val info = "${first.heightInMeters} > ${second.heightInMeters}"
             that(info, first.safeHeight <= second.safeHeight, Is(true))
