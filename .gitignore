@@ -3,3 +3,5 @@
 gradlew.bat
 gradlew
 build/
+out/test/resources/munrotab_v6.2.csv
+out/

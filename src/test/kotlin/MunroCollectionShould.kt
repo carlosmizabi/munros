@@ -123,6 +123,51 @@ internal class MunroCollectionShould {
         }
     }
 
+    @Test
+    fun `give us the first 10 items`() {
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA);
+        val munros = collection.munros.filter { it.type != Munro.Type.UNKNOWN}
+        val query = Query(sample = Sample.Head(10))
+        val filtered = collection.filter(query = query)
+        that(filtered.size, Is(10))
+        for(i in 0..9) {
+            val info = "${filtered[i].runningNo} == ${munros[i].runningNo}"
+            that(info, filtered[i], Is(munros[i]))
+        }
+        that(filtered.first(), Is(munros.first()))
+    }
+
+    @Test
+    fun `give us the last 10 items`() {
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA);
+        val munros = collection.munros.filter { it.type != Munro.Type.UNKNOWN}
+        val query = Query(sample = Sample.Tail(10))
+        val filtered = collection.filter(query = query)
+        that(filtered.size, Is(10))
+        for(i in 0..9) {
+            val tailPos = munros.size - (10 - i)
+            val info = "${filtered[i].runningNo} == ${munros[tailPos].runningNo}"
+            that(info, filtered[i], Is(munros[tailPos]))
+        }
+        that(filtered.last(), Is(munros.last()))
+    }
+
+    @Test
+    fun `give us a slice`() {
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA);
+        val munros = collection.munros.filter { it.type != Munro.Type.UNKNOWN}
+        val munros11to20 = munros.subList(11, 21)
+        val query = Query(sample = Sample.Slice(10, 11..20))
+        val filtered = collection.filter(query = query)
+        that(filtered.size, Is(10))
+        filtered.forEachIndexed { i, munro ->
+            val info = "${munro.runningNo} == ${munros[i].runningNo}"
+            that(info, munro, Is(munros11to20[i]))
+        }
+        that(filtered.first(), Is(munros11to20.first()))
+        that(filtered.last(), Is(munros11to20.last()))
+    }
+
     private fun makeForEachType(munros: Int = 0, tops: Int = 0, unknown: Int = 0)
             = makeMunros(Munro.Type.MUNRO, munros) +
             makeMunros(Munro.Type.TOP, tops) +
@@ -136,6 +181,6 @@ internal class MunroCollectionShould {
         }
     }
 
-    val Munro.safeHeight get() = heightInMeters ?: -1.0
+    private val Munro.safeHeight get() = heightInMeters ?: -1.0
 
 }
