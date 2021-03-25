@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'com.carlos'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -13,8 +13,11 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
 
+
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+
 }
 
 test {

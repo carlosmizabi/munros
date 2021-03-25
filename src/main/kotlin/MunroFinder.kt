@@ -1,3 +1,5 @@
 class MunroFinder {
-    fun hello() = "Hello"
+    fun parse(lines: List<String>): MunroCollection {
+        return MunroDataParser.parse(lines)
+    }
 }

@@ -7,6 +7,8 @@ object TestDataLoader {
 
     const val FULL_DATA_FILE = "munrotab_v6.2.csv"
 
+    fun readFullDateFile() = readLinesFrom(FULL_DATA_FILE)
+
     fun readLinesFrom(file: String): List<String> {
         var lines = emptyList<String>()
         try {

@@ -1,0 +1,1 @@
+data class MunroCollection(val munros: List<Munro>)
