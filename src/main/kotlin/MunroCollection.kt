@@ -35,8 +35,8 @@ data class Query(
 sealed class Sort(val sort: (List<Munro>) -> List<Munro>) {
     object NameAscending : Sort({ list -> list.sortedBy { it.name } })
     object NameDescending : Sort({ list -> list.sortedByDescending { it.name } })
-    object HeightMetersAscending : Sort({ list -> list.sortedBy { it.heightInMeters } })
-    object HeightMetersDescending : Sort({ list -> list.sortedByDescending { it.heightInMeters }})
+    object HeightMetersAscending : Sort({ list -> list.sortedBy { it.height } })
+    object HeightMetersDescending : Sort({ list -> list.sortedByDescending { it.height }})
 }
 
 sealed class Sample(val size: Int, val range: IntRange) {

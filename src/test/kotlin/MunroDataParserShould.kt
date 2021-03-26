@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Test
 import testing.TestDataLoader
-import testing.TestMunros.assertMatch
 import org.hamcrest.CoreMatchers.`is` as Is
 import org.hamcrest.MatcherAssert.assertThat as that
 
@@ -101,27 +100,9 @@ internal class MunroDataParserShould {
     fun `take a list of lines and gives us a collection of munros`() {
         val data = TestDataLoader.readLinesFrom("one_munro.csv")
         MunroDataParser.parse(data).munros.last().apply {
-            that("runningNo", runningNo, Is(47))
-            that("doBihNumber", doBihNumber, Is(112))
-            that(
-                "streetMapUrl",
-                streetMapUrl,
-                Is("\"http://www.streetmap.co.uk/newmap.srf?x=233178&y=740868&z=3&sv=233178,740868&st=4&tl=~&bi=~&lu=N&ar=y\"")
-            )
-            that("geographyUrl", geographyUrl, Is("http://www.geograph.org.uk/gridref/NN3317840868"))
-            that("hillBaggingUrl", hillBaggingUrl, Is("http://www.hill-bagging.co.uk/mountaindetails.php?qu=S&rf=112"))
             that("name", name, Is("Beinn an Dothaidh"))
-            that("smcSection", smcSection, Is(2))
-            that(section, Is(2.1))
-            that(rhbSection, Is("02A"))
-            that(heightInMeters, Is(1004.0))
-            that(heightInFeet, Is(3294.0))
-            that(map1to25, Is("377E"))
-            that(map1to50, Is("50"))
+            that(height, Is(1004.0))
             that(gridReference, Is("NN331408"))
-            that(gridReferenceXy, Is("NN3317840868"))
-            that(xCoordinate, Is(233178))
-            that(yCoordinate, Is(740868))
             that(type, Is(Munro.Type.MUNRO))
         }
     }

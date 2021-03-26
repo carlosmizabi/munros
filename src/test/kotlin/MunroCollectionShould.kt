@@ -13,7 +13,7 @@ internal class MunroCollectionShould {
 
     @Test
     fun `give us only the munros with the given type`() {
-        val items = makeForEachType(munros = 5, tops = 3, unknown = 2)
+        val items = makeForEachType()
         val collection = MunroCollection(items)
 
         val munros = collection.filter(Munro.Type.MUNRO)
@@ -57,7 +57,7 @@ internal class MunroCollectionShould {
         val munros = collection.filter(Munro.Type.MUNRO, query)
 
         that(munros.size, Is(68))
-        that(munros.all { range.contains(it.heightInMeters ?: 0.0)}, Is(true))
+        that(munros.all { range.contains(it.height ?: 0.0)}, Is(true))
 
         val underQuery = Query(heightRange =0.0.rangeTo(899.99))
         val overQuery = Query(heightRange = 950.01.rangeTo(5000.00))
@@ -101,7 +101,7 @@ internal class MunroCollectionShould {
         val query = Query(sorts = listOf(Sort.HeightMetersDescending))
         val sorted = collection.filter(query = query)
         val assertFirstIsLarger = { first: Munro, second: Munro ->
-            val info = "${first.heightInMeters} > ${second.heightInMeters}"
+            val info = "${first.height} > ${second.height}"
             that(info, first.safeHeight >= second.safeHeight, Is(true))
         }
         for (i in sorted.indices) {
@@ -115,7 +115,7 @@ internal class MunroCollectionShould {
         val query = Query(sorts = listOf(Sort.HeightMetersAscending))
         val sorted = collection.filter(query = query)
         val assertFirstIsLarger = { first: Munro, second: Munro ->
-            val info = "${first.heightInMeters} > ${second.heightInMeters}"
+            val info = "${first.height} > ${second.height}"
             that(info, first.safeHeight <= second.safeHeight, Is(true))
         }
         for (i in sorted.indices) {
@@ -125,13 +125,13 @@ internal class MunroCollectionShould {
 
     @Test
     fun `give us the first 10 items`() {
-        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA);
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
         val munros = collection.munros.filter { it.type != Munro.Type.UNKNOWN}
         val query = Query(sample = Sample.Head(10))
         val filtered = collection.filter(query = query)
         that(filtered.size, Is(10))
         for(i in 0..9) {
-            val info = "${filtered[i].runningNo} == ${munros[i].runningNo}"
+            val info = "${filtered[i].gridReference} == ${munros[i].gridReference}"
             that(info, filtered[i], Is(munros[i]))
         }
         that(filtered.first(), Is(munros.first()))
@@ -139,14 +139,14 @@ internal class MunroCollectionShould {
 
     @Test
     fun `give us the last 10 items`() {
-        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA);
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
         val munros = collection.munros.filter { it.type != Munro.Type.UNKNOWN}
         val query = Query(sample = Sample.Tail(10))
         val filtered = collection.filter(query = query)
         that(filtered.size, Is(10))
         for(i in 0..9) {
             val tailPos = munros.size - (10 - i)
-            val info = "${filtered[i].runningNo} == ${munros[tailPos].runningNo}"
+            val info = "${filtered[i].gridReference} == ${munros[tailPos].gridReference}"
             that(info, filtered[i], Is(munros[tailPos]))
         }
         that(filtered.last(), Is(munros.last()))
@@ -154,24 +154,24 @@ internal class MunroCollectionShould {
 
     @Test
     fun `give us a slice`() {
-        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA);
+        val collection = MunroFinder.parse(TestMunros.PARSED_TEST_DATA)
         val munros = collection.munros.filter { it.type != Munro.Type.UNKNOWN}
         val munros11to20 = munros.subList(11, 21)
         val query = Query(sample = Sample.Slice(10, 11..20))
         val filtered = collection.filter(query = query)
         that(filtered.size, Is(10))
         filtered.forEachIndexed { i, munro ->
-            val info = "${munro.runningNo} == ${munros[i].runningNo}"
+            val info = "${munro.gridReference} == ${munros[i].gridReference}"
             that(info, munro, Is(munros11to20[i]))
         }
         that(filtered.first(), Is(munros11to20.first()))
         that(filtered.last(), Is(munros11to20.last()))
     }
 
-    private fun makeForEachType(munros: Int = 0, tops: Int = 0, unknown: Int = 0)
-            = makeMunros(Munro.Type.MUNRO, munros) +
-            makeMunros(Munro.Type.TOP, tops) +
-            makeMunros(Munro.Type.UNKNOWN, unknown)
+    private fun makeForEachType()
+            = makeMunros(Munro.Type.MUNRO, 5) +
+            makeMunros(Munro.Type.TOP, 3) +
+            makeMunros(Munro.Type.UNKNOWN, 2)
 
     private fun makeMunros(type: Munro.Type, quantity: Int): List<Munro> {
         return IntRange(1, quantity).map {
@@ -181,6 +181,6 @@ internal class MunroCollectionShould {
         }
     }
 
-    private val Munro.safeHeight get() = heightInMeters ?: -1.0
+    private val Munro.safeHeight get() = height ?: -1.0
 
 }
